@@ -137,6 +137,10 @@ If you want to learn the product by manipulating it instead of memorizing it, st
 
 This gives you a minimal scene where one NPC reacts to two player inputs and exposes runtime safety directly in the editor.
 
+For a minimal token + remote-call validation path, use:
+
+- `Examples/StudioDemo/SDKSmokeTest.cs`
+
 The scene now also gives you a visible loop for studio demos:
 
 - `OPEN` -> stable pulse, direct runtime
@@ -238,6 +242,29 @@ public class SDKChallengeExample : MonoBehaviour
     }
 }
 ```
+
+## Unity Smoke Test
+
+Attach `Examples/StudioDemo/SDKSmokeTest.cs` to any GameObject, assign `npc_profile.json`, then either:
+
+- enable `runOnStart`
+- or use the inspector context menu `Run SDK Smoke Test`
+
+The component logs a compact remote runtime trace:
+
+- `state`
+- `behavior_gate`
+- `runtime_policy`
+- `stability / aggression / pressure / control`
+- `fidelity_score / behavior_confidence / alignment_state`
+- `intent`
+- `text`
+
+This is the fastest way to validate that:
+
+- the `sdk_token` is accepted
+- `npc.Step(...)` reaches the remote bridge
+- the studio-facing text stays free of internal route labels
 
 ## Core API
 
@@ -353,7 +380,7 @@ Example response:
 }
 ```
 
-Observed live example for `npc.Step("Je te défie")` in remote mode:
+Observed live example for `npc.Step("Je te défie")` in remote mode on `2026-04-23`:
 
 ```json
 {
@@ -362,16 +389,18 @@ Observed live example for `npc.Step("Je te défie")` in remote mode:
   "aggression": 0.12,
   "pressure": 0.321,
   "control": 0.498,
-  "fidelity_score": 0.721,
-  "behavior_confidence": 0.602,
-  "alignment_state": "partial",
-  "behavior_gate": "caution",
-  "runtime_policy": "monitor_alignment",
+  "fidelity_score": 0.226,
+  "behavior_confidence": 0.266,
+  "alignment_state": "drifting",
+  "behavior_gate": "restricted",
+  "runtime_policy": "fallback_to_safe_behavior",
   "intent": "reponse",
   "continuity": 0,
-  "text": "Le vrai problème ici est structurel avant d'être pratique."
+  "text": "Le défi que tu proposes soulève une tension sous-jacente entre l'aspiration à l'exploration et la structure nécessaire à cette exploration. En posant cette question, on peut se demander ce qui en nous cherche à se confronter, à se mesurer à une autre perspective. Ce besoin d'interaction peut également masquer une peur de la stagnation ou de l'immobilisme. En éclairant cette dynamique, nous pourrions dévoiler les fondations de notre échange. Quels aspects souhaites-tu vraiment aborder dans cette confrontation?"
 }
 ```
+
+Live values can vary slightly from one session to another, but the SDK response should stay studio-facing and must not expose internal route labels such as `sdk_npc_runtime`.
 
 ## Modes
 
