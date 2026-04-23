@@ -1,0 +1,10 @@
+{
+  "fossil_id": "fossil_valexa_01",
+  "quark_id": "quark_valexa_01",
+  "mode": "remote",
+  "npc_name": "Demo Guard",
+  "bridge_url": "https://game-ai.cordee.ovh/api/v1/sdk/step",
+  "npc_id": "incarna-demo-guard",
+  "session_id": "unity-demo-guard",
+  "embodiment_enabled": true
+}

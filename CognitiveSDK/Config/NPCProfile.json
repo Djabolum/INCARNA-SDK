@@ -1,0 +1,10 @@
+{
+  "fossil_id": "npc_guard_01",
+  "quark_id": "guard_behavior_v1",
+  "mode": "remote",
+  "npc_name": "Archive Guard",
+  "bridge_url": "https://game-ai.cordee.ovh/api/v1/sdk/step",
+  "npc_id": "incarna-archive-guard",
+  "session_id": "archive-demo-guard",
+  "embodiment_enabled": true
+}
