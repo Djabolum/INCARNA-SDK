@@ -52,6 +52,7 @@ namespace CognitiveSDK.Runtime
         public string mode = "remote";
         public string npc_name = "NPC";
         public string bridge_url = "https://game-ai.cordee.ovh/api/v1/sdk/step";
+        public string sdk_token = "";
         public string npc_id = "incarna-alpha";
         public string session_id = "unity-demo";
         public bool embodiment_enabled = false;

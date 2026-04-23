@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using CognitiveSDK.Runtime;
 
@@ -26,9 +27,16 @@ namespace CognitiveSDK.Adapters
                 };
 
                 var json = UnityEngine.JsonUtility.ToJson(payload);
+                var request = new HttpRequestMessage(HttpMethod.Post, profile.bridge_url)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
+                if (!string.IsNullOrWhiteSpace(profile.sdk_token))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
+                }
                 var response = Client.PostAsync(
-                    profile.bridge_url,
-                    new StringContent(json, Encoding.UTF8, "application/json")
+                    request
                 ).GetAwaiter().GetResult();
 
                 var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -50,9 +58,16 @@ namespace CognitiveSDK.Adapters
             try
             {
                 var json = UnityEngine.JsonUtility.ToJson(request);
+                var httpRequest = new HttpRequestMessage(HttpMethod.Post, profile.bridge_url)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
+                if (!string.IsNullOrWhiteSpace(profile.sdk_token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
+                }
                 var response = Client.PostAsync(
-                    profile.bridge_url,
-                    new StringContent(json, Encoding.UTF8, "application/json")
+                    httpRequest
                 ).GetAwaiter().GetResult();
 
                 var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -81,9 +96,16 @@ namespace CognitiveSDK.Adapters
 
                 var json = UnityEngine.JsonUtility.ToJson(payload);
                 var resetUrl = profile.bridge_url.Replace("/step", "/reset-session");
+                var request = new HttpRequestMessage(HttpMethod.Post, resetUrl)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
+                if (!string.IsNullOrWhiteSpace(profile.sdk_token))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
+                }
                 var response = Client.PostAsync(
-                    resetUrl,
-                    new StringContent(json, Encoding.UTF8, "application/json")
+                    request
                 ).GetAwaiter().GetResult();
 
                 return response.IsSuccessStatusCode;
@@ -106,9 +128,16 @@ namespace CognitiveSDK.Adapters
 
                 var json = UnityEngine.JsonUtility.ToJson(payload);
                 var inspectUrl = profile.bridge_url.Replace("/step", "/inspect");
+                var request = new HttpRequestMessage(HttpMethod.Post, inspectUrl)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json")
+                };
+                if (!string.IsNullOrWhiteSpace(profile.sdk_token))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
+                }
                 var response = Client.PostAsync(
-                    inspectUrl,
-                    new StringContent(json, Encoding.UTF8, "application/json")
+                    request
                 ).GetAwaiter().GetResult();
 
                 var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();

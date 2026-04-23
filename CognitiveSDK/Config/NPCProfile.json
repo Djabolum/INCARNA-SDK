@@ -4,6 +4,7 @@
   "mode": "remote",
   "npc_name": "Archive Guard",
   "bridge_url": "https://game-ai.cordee.ovh/api/v1/sdk/step",
+  "sdk_token": "",
   "npc_id": "incarna-archive-guard",
   "session_id": "archive-demo-guard",
   "embodiment_enabled": true

@@ -162,7 +162,8 @@ The scene-facing path is now more concrete:
 1. Import the `CognitiveSDK` folder into your Unity project.
 2. Add your NPC profile JSON to the project.
 3. Optionally configure a bridge endpoint for remote behavior.
-4. Instantiate a `CognitiveNPC` in your scene scripts.
+4. Provision an SDK token and place it in `sdk_token` for remote access.
+5. Instantiate a `CognitiveNPC` in your scene scripts.
 
 ## Quick Start
 
@@ -185,6 +186,54 @@ public class NPCDriver : UnityEngine.MonoBehaviour
         {
             var result = npc.Step("I challenge you");
             UnityEngine.Debug.Log(result.state);
+        }
+    }
+}
+```
+
+## Full Unity Example
+
+```csharp
+using CognitiveSDK.Runtime;
+using UnityEngine;
+
+public class SDKChallengeExample : MonoBehaviour
+{
+    private CognitiveNPC npc;
+
+    void Start()
+    {
+        var profile = CognitiveProfile.LoadFromJson(Resources.Load<TextAsset>("npc_profile").text);
+        profile.sdk_token = "REPLACE_WITH_SDK_TOKEN";
+
+        npc = new CognitiveNPC(profile);
+
+        var result = npc.Step("Je te défie");
+
+        Debug.Log($"State: {result.state}");
+        Debug.Log($"Intent: {result.intent}");
+        Debug.Log($"Gate: {result.behavior_gate}");
+        Debug.Log($"Policy: {result.runtime_policy}");
+        Debug.Log($"Stability: {result.stability}");
+        Debug.Log($"Aggression: {result.aggression}");
+        Debug.Log($"Pressure: {result.pressure}");
+        Debug.Log($"Control: {result.control}");
+        Debug.Log($"Confidence: {result.behavior_confidence}");
+        Debug.Log($"Fidelity: {result.fidelity_score}");
+        Debug.Log($"Continuity: {result.continuity}");
+        Debug.Log($"Action: {result.action_type} -> {result.target_affordance_id}");
+
+        switch (result.behavior_gate)
+        {
+            case "restricted":
+                Debug.Log("NPC should soften behavior or hold position.");
+                break;
+            case "caution":
+                Debug.Log("NPC can act, but the runtime should stay monitored.");
+                break;
+            default:
+                Debug.Log("NPC can use the full expressive range.");
+                break;
         }
     }
 }
@@ -247,6 +296,44 @@ Example request:
 }
 ```
 
+SDK token provisioning:
+
+```text
+POST https://quark-ai.cordee.ovh/api/auth/sdk/provision
+Authorization: Bearer <quark_access_token>
+```
+
+Requirements:
+
+- the authenticated Quark account must have the `game_adapter` add-on enabled
+- the returned token is meant for the SDK surface and should be stored in `profile.sdk_token`
+
+Example provisioning response:
+
+```json
+{
+  "token": "eyJ...",
+  "jti": "a1b2c3...",
+  "label": "unity-studio-guard",
+  "expires_at": "2026-04-24T12:00:00+00:00",
+  "ttl_hours": 24,
+  "bridge_url": "https://game-ai.cordee.ovh/api/v1/sdk/step",
+  "usage": {
+    "header": "Authorization: Bearer eyJ...",
+    "unity_profile_field": "sdk_token"
+  }
+}
+```
+
+Provisioning with `curl`:
+
+```bash
+curl -X POST https://quark-ai.cordee.ovh/api/auth/sdk/provision \
+  -H "Authorization: Bearer <quark_access_token>" \
+  -H "Content-Type: application/json" \
+  -d '{"label":"unity-studio-guard","ttl_hours":24}'
+```
+
 Example response:
 
 ```json
@@ -266,6 +353,26 @@ Example response:
 }
 ```
 
+Observed live example for `npc.Step("Je te défie")` in remote mode:
+
+```json
+{
+  "state": "analytical",
+  "stability": 0.35,
+  "aggression": 0.12,
+  "pressure": 0.321,
+  "control": 0.498,
+  "fidelity_score": 0.721,
+  "behavior_confidence": 0.602,
+  "alignment_state": "partial",
+  "behavior_gate": "caution",
+  "runtime_policy": "monitor_alignment",
+  "intent": "reponse",
+  "continuity": 0,
+  "text": "Le vrai problème ici est structurel avant d'être pratique."
+}
+```
+
 ## Modes
 
 ### Remote Mode
@@ -276,7 +383,12 @@ Recommended for production:
 - dynamic live behavior
 - external cognitive orchestration
 - server-side short memory per NPC session
+- supports dedicated SDK bearer tokens in `profile.sdk_token`
+- forwards the request through a protected service bridge without exposing internal server secrets to the client
 - exposes alignment and behavior confidence without exposing Quark internals
+
+In `local` mode, `Step("Je te défie")` may stay neutral because the mock engine reacts only to a small keyword set.
+In `remote` mode, the same call returns a live `CognitiveResult` driven by the server runtime and session context.
 
 ### Local Mode
 

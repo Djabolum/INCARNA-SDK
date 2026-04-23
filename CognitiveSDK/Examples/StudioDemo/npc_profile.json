@@ -4,6 +4,7 @@
   "mode": "remote",
   "npc_name": "Demo Guard",
   "bridge_url": "https://game-ai.cordee.ovh/api/v1/sdk/step",
+  "sdk_token": "",
   "npc_id": "incarna-demo-guard",
   "session_id": "unity-demo-guard",
   "embodiment_enabled": true
