@@ -480,6 +480,22 @@ switch (result.state)
 - behavior debugger
 - marketplace integration
 
+## Inspect Surface
+
+The studio inspect route can now expose two levels of reading:
+
+- a compact orientation summary:
+  - `dominant_axis`
+  - `mode`
+  - `posture`
+- an optional `Elysian` debug resolution:
+  - primary zone
+  - salience gap
+  - interpretation notes
+
+This remains a reading surface only.
+It does not turn `Elysian` into an action planner.
+
 ## Studio Demo
 
 A ready-to-wire Unity demo scaffold is included in:

@@ -41,6 +41,18 @@ public class DemoHUD : MonoBehaviour
             GUILayout.Label("Inspect npc: " + (lastInspect.session != null ? lastInspect.session.npc_id : "none"));
             GUILayout.Label("Updated: " + (lastInspect.session != null ? lastInspect.session.updated_at : "n/a"));
             GUILayout.Space(8);
+            GUILayout.Label("Orientation:");
+            GUILayout.Label("Axis: " + (lastInspect.orientation != null ? lastInspect.orientation.dominant_axis : "none"));
+            GUILayout.Label("Mode: " + (lastInspect.orientation != null ? lastInspect.orientation.mode : "none"));
+            GUILayout.Label("Posture: " + (lastInspect.orientation != null ? lastInspect.orientation.posture : "none"));
+            if (lastInspect.elysian_debug != null && lastInspect.elysian_debug.resolution != null)
+            {
+                GUILayout.Space(6);
+                GUILayout.Label("Elysian debug:");
+                GUILayout.Label("Primary zone: " + (lastInspect.elysian_debug.resolution.primary_zone_label ?? "none"));
+                GUILayout.Label("Salience gap: " + lastInspect.elysian_debug.resolution.salience_gap.ToString("0.00"));
+            }
+            GUILayout.Space(8);
             GUILayout.Label("Zone memory:");
             GUILayout.TextArea(lastInspect.zone_memory != null ? lastInspect.zone_memory.raw_json ?? "{}" : "{}", GUILayout.Height(210));
             GUILayout.Space(6);

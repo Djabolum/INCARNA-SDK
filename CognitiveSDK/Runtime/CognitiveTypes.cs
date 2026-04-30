@@ -227,6 +227,8 @@ namespace CognitiveSDK.Runtime
     public class InspectResponse
     {
         public SessionSnapshot session;
+        public OrientationSnapshot orientation;
+        public ElysianDebugSnapshot elysian_debug;
         public ZoneMemorySnapshot zone_memory;
     }
 
@@ -243,5 +245,36 @@ namespace CognitiveSDK.Runtime
     {
         public string npc_id;
         public string raw_json;
+    }
+
+    [Serializable]
+    public class OrientationSnapshot
+    {
+        public string dominant_axis;
+        public string secondary_axis;
+        public float world_readability;
+        public float interpretive_confidence;
+        public string mode;
+        public string posture;
+    }
+
+    [Serializable]
+    public class ElysianDebugSnapshot
+    {
+        public ResolutionSnapshot resolution;
+    }
+
+    [Serializable]
+    public class ResolutionSnapshot
+    {
+        public string primary_zone_id;
+        public string primary_zone_label;
+        public float primary_zone_salience;
+        public string secondary_zone_id;
+        public string secondary_zone_label;
+        public float secondary_zone_salience;
+        public float salience_gap;
+        public string recent_vector;
+        public string[] interpretation_notes;
     }
 }
