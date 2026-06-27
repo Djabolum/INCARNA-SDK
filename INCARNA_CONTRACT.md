@@ -67,6 +67,7 @@ Observation is separated from intervention.
 Orundra Presence Contract V0 is documented in:
 
 ```text
+docs/PRESENCE_STACK_STATUS.md
 docs/ORUNDRA_PRESENCE_CONTRACT_V0.md
 docs/ORUNDRA_PRESENCE_STATE_MACHINE_V0.md
 docs/ORUNDRA_PRESENCE_RUNTIME_PROJECTION_V0.md
