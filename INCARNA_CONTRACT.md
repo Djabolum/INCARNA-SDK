@@ -62,6 +62,28 @@ Genome            → reads global coherence
 No layer reaches back into action_policy.  
 Observation is separated from intervention.
 
+## Orundra presence boundary
+
+Orundra Presence Contract V0 is documented in:
+
+```text
+docs/ORUNDRA_PRESENCE_CONTRACT_V0.md
+docs/ORUNDRA_PRESENCE_STATE_MACHINE_V0.md
+docs/ORUNDRA_PRESENCE_RUNTIME_PROJECTION_V0.md
+docs/ORUNDRA_VOICE_READINESS_V0.md
+```
+
+The contract keeps expression separate from decision:
+
+```text
+orientation != presence
+presence != voice
+voice != action
+```
+
+Incarna can return the behavioral orientation. The presence layer decides how
+that orientation is expressed, silenced, clarified, accompanied or withdrawn.
+
 ## Demonstration surface
 
 ```
