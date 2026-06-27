@@ -74,6 +74,7 @@ docs/ORUNDRA_PRESENCE_RUNTIME_PROJECTION_V0.md
 docs/ORUNDRA_VOICE_READINESS_V0.md
 docs/VOICE_SURFACE_CONTRACT_V0.md
 docs/ORUNDRA_VOICE_INPUT_CONTRACT_V0.md
+docs/ORUNDRA_VOICE_LOOP_READINESS_V0.md
 ```
 
 The contract keeps expression separate from decision:
