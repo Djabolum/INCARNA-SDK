@@ -24,3 +24,10 @@ The current studio contract is V0.7. It removes misleading public internal-state
 DTOs and admits the optional Orundra morphology candidate only through an exact,
 visual-only, fail-closed guard. See
 `docs/ORUNDRA_MORPHOLOGY_STUDIO_CONTRACT_V0_7.md`.
+
+The 2026-08-23 ecosystem one-shot validated a candidate through the server and
+studio-safe guards. This does not change the SDK-local authority boundary: the
+public SDK still performs no source read, enables no relay, writes no stable
+memory, and grants no canon promotion. The operational receipt is maintained in
+`Djabolum/Void-Project` at
+`docs/receipts/ORUNDRA_MORPHOLOGY_DEPLOYMENT_ONE_SHOT_CLOSURE_2026_08_23.md`.
