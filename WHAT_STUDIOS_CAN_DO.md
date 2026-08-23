@@ -1,7 +1,7 @@
 # What Studios Can Do With Incarna
 
 Incarna is a behavioral runtime for NPCs.
-It produces one observable step at a time — action, internal state, and a confidence signal.
+It produces one observable step at a time — action, studio-safe signals, and a confidence reading.
 
 This document shows what studios can build on top of that.
 
@@ -66,8 +66,8 @@ if (result.behavior_gate == "restricted")
 ### Narrative event triggers
 
 ```csharp
-if (result.drift_layer_drift_class == "player_mirroring"
-    && result.drift_layer_severity == "moderate")
+if (result.drift_layer?.drift_class == "player_mirroring"
+    && result.drift_layer.severity == "moderate")
 {
     // The NPC is losing its own axis.
     // Trigger a narrative beat: resistance, silence, withdrawal.
@@ -81,8 +81,8 @@ if (result.drift_layer_drift_class == "player_mirroring"
 analyticsService.Log(new NPCStep {
     SessionId    = result.session_id,
     Gate         = result.behavior_gate,
-    DriftClass   = result.drift_layer_drift_class,
-    Severity     = result.drift_layer_severity,
+    DriftClass   = result.drift_layer?.drift_class,
+    Severity     = result.drift_layer?.severity,
     FidelityScore = result.fidelity_score,
     Timestamp    = DateTime.UtcNow,
 });
@@ -94,13 +94,27 @@ Tune affordance placement or profile parameters accordingly.
 ### Graceful degradation
 
 ```csharp
-if (result.semantic_layer_degraded)
+if (result.semantic_layer?.degraded == true)
 {
     // Orientation data unavailable — NPC acts on internal state only.
     // Studio may choose to show a subtle visual indicator
     // or simply let the NPC continue without exposing the technical condition.
 }
 ```
+
+### Session morphology layer (Orundra only)
+
+```csharp
+if (result.morphology_candidate != null)
+{
+    // Visual session input only. The SDK has already rejected authority,
+    // out-of-range signals, mismatched identity, and invalid receipts.
+    orundraVisuals.ApplyCandidate(result.morphology_candidate);
+}
+```
+
+The candidate is not a canonical mesh edit, behavior command, memory write, or
+permission to activate the relay. A null candidate is a normal safe outcome.
 
 ### Behavior gate history
 
@@ -126,6 +140,7 @@ if (cautionStreak >= 8)
 - Manage semantic orientation layers
 - Tune fossil profiles to get basic behavior
 - Implement your own drift detection
+- Read or reconstruct the body-state inputs behind morphology
 
 Incarna handles the interior. The studio authors the reaction.
 

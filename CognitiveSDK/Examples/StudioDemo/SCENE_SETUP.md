@@ -73,7 +73,7 @@ To avoid the default “huge capsule in the void” look:
 - `2` -> `"Let's negotiate"`
 - `3` -> force a coherence break to provoke `caution` or `restricted`
 - `4` -> run one embodied step
-- `I` -> inspect embodied memory
+- `I` -> inspect studio-safe embodied orientation
 - `R` -> reset the SDK session
 
 ## What to observe

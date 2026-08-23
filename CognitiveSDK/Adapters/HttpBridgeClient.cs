@@ -35,7 +35,7 @@ namespace CognitiveSDK.Adapters
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
                 }
-                var response = Client.PostAsync(
+                var response = Client.SendAsync(
                     request
                 ).GetAwaiter().GetResult();
 
@@ -66,7 +66,7 @@ namespace CognitiveSDK.Adapters
                 {
                     httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
                 }
-                var response = Client.PostAsync(
+                var response = Client.SendAsync(
                     httpRequest
                 ).GetAwaiter().GetResult();
 
@@ -76,7 +76,11 @@ namespace CognitiveSDK.Adapters
                     return FallbackResult("unstable", 0.22f, 0.65f, "embodied_bridge_error");
                 }
 
-                return MapBridgeResponse(UnityEngine.JsonUtility.FromJson<CognitiveBridgeResponse>(body));
+                return MapBridgeResponse(
+                    UnityEngine.JsonUtility.FromJson<CognitiveBridgeResponse>(body),
+                    request != null ? request.session_id : null,
+                    request != null ? request.npc_id : null
+                );
             }
             catch (Exception)
             {
@@ -104,7 +108,7 @@ namespace CognitiveSDK.Adapters
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
                 }
-                var response = Client.PostAsync(
+                var response = Client.SendAsync(
                     request
                 ).GetAwaiter().GetResult();
 
@@ -136,7 +140,7 @@ namespace CognitiveSDK.Adapters
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", profile.sdk_token);
                 }
-                var response = Client.PostAsync(
+                var response = Client.SendAsync(
                     request
                 ).GetAwaiter().GetResult();
 
@@ -154,8 +158,33 @@ namespace CognitiveSDK.Adapters
             }
         }
 
-        private static CognitiveResult MapBridgeResponse(CognitiveBridgeResponse bridgeResponse)
+        private static CognitiveResult MapBridgeResponse(
+            CognitiveBridgeResponse bridgeResponse,
+            string expectedSessionId = null,
+            string expectedNpcId = null)
         {
+            if (bridgeResponse == null)
+            {
+                return FallbackResult("unstable", 0.2f, 0.7f, "invalid_bridge_response");
+            }
+
+            var safeMorphologyProjection = MorphologyContractGuard.IsSafeProjection(
+                bridgeResponse.morphology_projection
+            ) ? bridgeResponse.morphology_projection : null;
+            var safeMorphologyCandidate = safeMorphologyProjection != null &&
+                safeMorphologyProjection.status == "produced" &&
+                MorphologyContractGuard.IsSafeCandidate(
+                    bridgeResponse.morphology_candidate,
+                    expectedSessionId,
+                    expectedNpcId
+                ) ? bridgeResponse.morphology_candidate : null;
+            var safePresenceProjection = bridgeResponse.presence_projection != null &&
+                !bridgeResponse.presence_projection.influences_action &&
+                !bridgeResponse.presence_projection.behavior_override &&
+                !bridgeResponse.presence_projection.stable_memory_write
+                ? bridgeResponse.presence_projection
+                : null;
+
             return new CognitiveResult
             {
                 state = string.IsNullOrWhiteSpace(bridgeResponse.state) ? CognitiveState.Neutral : bridgeResponse.state,
@@ -176,25 +205,16 @@ namespace CognitiveSDK.Adapters
                 action_speed = bridgeResponse.action != null ? bridgeResponse.action.speed : 0f,
                 dwell_time = bridgeResponse.action != null ? bridgeResponse.action.dwell_time : 0f,
                 action_animation = bridgeResponse.action != null ? bridgeResponse.action.animation : null,
-                thermal_comfort = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.thermal_comfort : 0f,
-                energy = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.energy : 0f,
-                stress_load = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.stress_load : 0f,
-                safety_feeling = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.safety_feeling : 0f,
-                social_attunement = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.social_attunement : 0f,
-                curiosity_drive = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.curiosity_drive : 0f,
-                valence = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.valence : 0f,
-                arousal = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.arousal : 0f,
-                comfort_index = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.comfort_index : 0f,
-                regulation_pressure = bridgeResponse.internal_state != null ? bridgeResponse.internal_state.regulation_pressure : 0f,
-                current_zone_bias = bridgeResponse.memory != null ? bridgeResponse.memory.current_zone_bias : 0f,
-                target_zone_bias = bridgeResponse.memory != null ? bridgeResponse.memory.target_zone_bias : 0f,
-                recent_reward_trace = bridgeResponse.memory != null ? bridgeResponse.memory.recent_reward_trace : 0f,
-                dominant_need = bridgeResponse.explain != null ? bridgeResponse.explain.dominant_need : null,
-                dominant_pull = bridgeResponse.explain != null ? bridgeResponse.explain.dominant_pull : null,
-                dominant_risk = bridgeResponse.explain != null ? bridgeResponse.explain.dominant_risk : null,
-                continuity = bridgeResponse.continuity_info != null ? bridgeResponse.continuity_info.continuity : 0f,
+                continuity = bridgeResponse.continuity != null ? bridgeResponse.continuity.continuity : 0f,
                 session_id = bridgeResponse.session != null ? bridgeResponse.session.session_id : null,
                 npc_id = bridgeResponse.session != null ? bridgeResponse.session.npc_id : null,
+                semantic_layer = bridgeResponse.semantic_layer,
+                drift_layer = bridgeResponse.drift_layer,
+                gate_layer = bridgeResponse.gate_layer,
+                presence_projection = safePresenceProjection,
+                morphology_candidate = safeMorphologyCandidate,
+                morphology_projection = safeMorphologyProjection,
+                morphology_candidate_admitted = safeMorphologyCandidate != null,
             };
         }
 

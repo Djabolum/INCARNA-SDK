@@ -23,25 +23,16 @@ namespace CognitiveSDK.Runtime
         public float action_speed;
         public float dwell_time;
         public string action_animation;
-        public float thermal_comfort;
-        public float energy;
-        public float stress_load;
-        public float safety_feeling;
-        public float social_attunement;
-        public float curiosity_drive;
-        public float valence;
-        public float arousal;
-        public float comfort_index;
-        public float regulation_pressure;
-        public float current_zone_bias;
-        public float target_zone_bias;
-        public float recent_reward_trace;
-        public string dominant_need;
-        public string dominant_pull;
-        public string dominant_risk;
         public float continuity;
         public string session_id;
         public string npc_id;
+        public SemanticLayerDto semantic_layer;
+        public DriftLayerDto drift_layer;
+        public GateLayerDto gate_layer;
+        public PresenceProjectionDto presence_projection;
+        public OrundraMorphologyCandidateDto morphology_candidate;
+        public MorphologyProjectionReceiptDto morphology_projection;
+        public bool morphology_candidate_admitted;
     }
 
     [Serializable]
@@ -86,13 +77,15 @@ namespace CognitiveSDK.Runtime
         public string intent;
         public string text;
         public ActionDto action;
-        public InternalStateDto internal_state;
-        public MemoryDto memory;
         public SignalDto signals;
-        public ExplainDto explain;
-        public ContinuityDto continuity_info;
+        public ContinuityDto continuity;
+        public SemanticLayerDto semantic_layer;
+        public DriftLayerDto drift_layer;
+        public GateLayerDto gate_layer;
+        public PresenceProjectionDto presence_projection;
+        public OrundraMorphologyCandidateDto morphology_candidate;
+        public MorphologyProjectionReceiptDto morphology_projection;
         public SessionDto session;
-        public QuarkEventDto quark_event;
     }
 
     [Serializable]
@@ -152,26 +145,23 @@ namespace CognitiveSDK.Runtime
     }
 
     [Serializable]
-    public class InternalStateDto
+    public class SemanticLayerDto
     {
-        public float thermal_comfort;
-        public float energy;
-        public float stress_load;
-        public float safety_feeling;
-        public float social_attunement;
-        public float curiosity_drive;
-        public float valence;
-        public float arousal;
-        public float comfort_index;
-        public float regulation_pressure;
+        public string source;
+        public float confidence;
+        public bool degraded;
+        public string reason;
     }
 
     [Serializable]
-    public class MemoryDto
+    public class DriftLayerDto
     {
-        public float current_zone_bias;
-        public float target_zone_bias;
-        public float recent_reward_trace;
+        public string drift_class;
+        public string severity;
+        public float confidence;
+        public bool degraded_semantics;
+        public string studio_safe_reason;
+        public int context_size;
     }
 
     [Serializable]
@@ -185,11 +175,13 @@ namespace CognitiveSDK.Runtime
     }
 
     [Serializable]
-    public class ExplainDto
+    public class GateLayerDto
     {
-        public string dominant_need;
-        public string dominant_pull;
-        public string dominant_risk;
+        public string behavior_gate;
+        public string gate_source;
+        public string drift_gate;
+        public string studio_safe_reason;
+        public string version;
     }
 
     [Serializable]
@@ -201,19 +193,94 @@ namespace CognitiveSDK.Runtime
     }
 
     [Serializable]
+    public class PresenceProjectionDto
+    {
+        public string mode;
+        public bool influences_action;
+        public bool behavior_override;
+        public bool stable_memory_write;
+    }
+
+    [Serializable]
+    public class MorphologyAuthorityDto
+    {
+        public bool runtime_body_change;
+        public bool stable_body_change;
+        public bool memory_write;
+        public bool promotion_to_canon;
+    }
+
+    [Serializable]
+    public class MorphologySignalsDto
+    {
+        public float cosmic_void_phase;
+        public float body_formation_progress;
+        public float trust_construction_progress;
+        public float shelter_density;
+        public float warmth_exposure;
+        public float shadow_affinity;
+        public float chaos_pressure;
+        public float novelty_pressure;
+        public float neoxys_density;
+    }
+
+    [Serializable]
+    public class MorphologyMaterializationZoneDto
+    {
+        public string region;
+        public bool materialized;
+        public float strength;
+        public string reason;
+    }
+
+    [Serializable]
+    public class MorphologyCandidateEffectDto
+    {
+        public string region;
+        public string effect;
+        public float strength;
+        public string reason;
+    }
+
+    [Serializable]
+    public class OrundraMorphologyCandidateDto
+    {
+        public string schema;
+        public string session_id;
+        public string trace_id;
+        public string source;
+        public string entity_id;
+        public string persistence;
+        public string phase;
+        public MorphologyAuthorityDto authority;
+        public MorphologySignalsDto signals;
+        public MorphologyMaterializationZoneDto[] materialization_zones;
+        public MorphologyCandidateEffectDto[] candidate_effects;
+        public bool fossilizable;
+        public bool canon_promotion_allowed;
+    }
+
+    [Serializable]
+    public class MorphologyProjectionReceiptDto
+    {
+        public string schema;
+        public string status;
+        public string reason;
+        public string source;
+        public string mode;
+        public bool body_state_exposed;
+        public bool influences_action;
+        public bool behavior_override;
+        public bool stable_memory_write;
+        public bool canon_promotion_allowed;
+    }
+
+    [Serializable]
     public class SessionDto
     {
         public string session_id;
         public string npc_id;
         public string updated_at;
-    }
-
-    [Serializable]
-    public class QuarkEventDto
-    {
-        public string event_type;
-        public string session_id;
-        public string npc_id;
     }
 
     [Serializable]
@@ -229,7 +296,6 @@ namespace CognitiveSDK.Runtime
         public SessionSnapshot session;
         public OrientationSnapshot orientation;
         public ElysianDebugSnapshot elysian_debug;
-        public ZoneMemorySnapshot zone_memory;
     }
 
     [Serializable]
@@ -238,13 +304,6 @@ namespace CognitiveSDK.Runtime
         public string session_id;
         public string npc_id;
         public string updated_at;
-    }
-
-    [Serializable]
-    public class ZoneMemorySnapshot
-    {
-        public string npc_id;
-        public string raw_json;
     }
 
     [Serializable]

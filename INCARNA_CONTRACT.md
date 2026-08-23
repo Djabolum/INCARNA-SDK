@@ -7,6 +7,8 @@ driven by the NPC's internal state, its spatial context, and its memory of the
 environment.
 
 Each step returns an action, a set of observable signals, and a behavior gate.
+For Orundra, it may also return a guarded morphology candidate that is visual,
+session-only, and non-authoritative.
 
 ## What the studio receives
 
@@ -19,6 +21,8 @@ action            — move / dwell / approach / withdraw / idle
 action_target     — affordance the NPC is oriented toward
 signals           — stability, fidelity_score, aggression, pressure, control
 semantic_layer    — orientation source and confidence
+morphology_candidate — optional visual-only Orundra projection
+morphology_projection — explicit non-authority receipt
 ```
 
 ## What the studio does not receive
@@ -28,6 +32,7 @@ semantic_layer    — orientation source and confidence
 - Session memory weights
 - Fossil profile internals
 - Invariant structure
+- Any body-state input used to produce morphology
 
 ## The gate contract
 
@@ -61,6 +66,19 @@ Genome            → reads global coherence
 
 No layer reaches back into action_policy.  
 Observation is separated from intervention.
+
+## Morphology boundary
+
+```text
+source-side internal mapping != public body state
+morphology candidate != body edit
+relay implementation != runtime activation
+candidate production != canon promotion
+```
+
+The public SDK validates the candidate again before exposing it. Any authority
+bit, invalid source/schema/session/entity, unbounded signal, or missing
+`produced` projection receipt makes the candidate disappear from the result.
 
 ## Orundra presence boundary
 
@@ -96,7 +114,7 @@ that orientation is expressed, silenced, clarified, accompanied or withdrawn.
 GET  https://game-ai.cordee.ovh            — public sandbox
 POST /api/v1/sdk/step                      — embodied step
 POST /api/v1/sdk/reset-session             — session reset
-POST /api/v1/sdk/inspect                   — debug memory state
+POST /api/v1/sdk/inspect                   — studio-safe orientation inspection
 ```
 
 Authentication: Bearer token provisioned via Quark-AI (`/api/auth/sdk/provision`).

@@ -52,9 +52,6 @@ public class DemoHUD : MonoBehaviour
                 GUILayout.Label("Primary zone: " + (lastInspect.elysian_debug.resolution.primary_zone_label ?? "none"));
                 GUILayout.Label("Salience gap: " + lastInspect.elysian_debug.resolution.salience_gap.ToString("0.00"));
             }
-            GUILayout.Space(8);
-            GUILayout.Label("Zone memory:");
-            GUILayout.TextArea(lastInspect.zone_memory != null ? lastInspect.zone_memory.raw_json ?? "{}" : "{}", GUILayout.Height(210));
             GUILayout.Space(6);
             GUILayout.Label("Keys: 1 = challenge, 2 = negotiate, 3 = drift, 4 = embodied, I = inspect, R = reset");
             GUILayout.EndArea();
@@ -91,7 +88,7 @@ public class DemoHUD : MonoBehaviour
         GUILayout.Space(8);
         GUILayout.Label("Action: " + (lastResult.action_type ?? "none"));
         GUILayout.Label("Target: " + (lastResult.target_affordance_id ?? "none"));
-        GUILayout.Label("Need: " + (lastResult.dominant_need ?? "none"));
+        GUILayout.Label("Gate reason: " + (lastResult.gate_layer?.studio_safe_reason ?? "none"));
         GUILayout.Label("Continuity: " + lastResult.continuity.ToString("0.00"));
         GUILayout.Space(8);
         GUILayout.Label("Visual reading: " + GetGateExplanation(lastResult.behavior_gate));
