@@ -1,0 +1,80 @@
+{
+  "schema": "orundra_morphology_runtime_relay_fixture_v0_6",
+  "producer": "incarna.internal_to_elysian",
+  "semantic_engine": "elysian.morphing",
+  "consumers": [
+    "void_gateway",
+    "neoxys"
+  ],
+  "relay_implemented": true,
+  "activation_default": false,
+  "activation_flag": "VOID_MORPHOLOGY_PROJECTION_ENABLED",
+  "orientation_activation": false,
+  "body_state_exposed": false,
+  "real_source_read_performed": false,
+  "runtime_deployment_performed": false,
+  "guardrails": [
+    "internal state mapping stays source-side",
+    "morphology projection happens after action selection",
+    "morphology candidate != body edit",
+    "session visual layer != stable memory",
+    "relay implementation != runtime activation",
+    "candidate production != canon promotion"
+  ],
+  "projection_receipt": {
+    "schema": "orundra_morphology_projection_receipt_v0",
+    "status": "produced",
+    "reason": null,
+    "source": "incarna.internal_to_elysian",
+    "mode": "post_decision_visual_only",
+    "body_state_exposed": false,
+    "influences_action": false,
+    "behavior_override": false,
+    "stable_memory_write": false,
+    "canon_promotion_allowed": false
+  },
+  "candidate_fixture": {
+    "schema": "orundra_morphology_candidate_v0",
+    "session_id": "void-relay-contract-001",
+    "trace_id": "trace-relay-contract-001",
+    "source": "elysian.morphing",
+    "entity_id": "orundra",
+    "persistence": "session_only",
+    "phase": "condensation",
+    "authority": {
+      "runtime_body_change": false,
+      "stable_body_change": false,
+      "memory_write": false,
+      "promotion_to_canon": false
+    },
+    "signals": {
+      "cosmic_void_phase": 0.58,
+      "body_formation_progress": 0.51,
+      "trust_construction_progress": 0.49,
+      "shelter_density": 0.62,
+      "warmth_exposure": 0.44,
+      "shadow_affinity": 0.38,
+      "chaos_pressure": 0.12,
+      "novelty_pressure": 0.24,
+      "neoxys_density": 0.39
+    },
+    "materialization_zones": [
+      {
+        "region": "hands",
+        "materialized": true,
+        "strength": 0.74,
+        "reason": "runtime relay contract zone"
+      }
+    ],
+    "candidate_effects": [
+      {
+        "region": "post_auricular",
+        "effect": "thermal_groove_emergence",
+        "strength": 0.62,
+        "reason": "runtime relay contract effect"
+      }
+    ],
+    "fossilizable": true,
+    "canon_promotion_allowed": false
+  }
+}

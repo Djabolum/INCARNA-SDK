@@ -114,7 +114,7 @@ public class DemoController : MonoBehaviour
             {
                 action = lastEmbodiedResult != null ? lastEmbodiedResult.action_type ?? "idle" : "idle",
                 success = lastEmbodiedResult != null ? Mathf.Lerp(0.45f, 1f, lastEmbodiedResult.fidelity_score) : 0.8f,
-                cost = lastEmbodiedResult != null ? Mathf.Clamp01(lastEmbodiedResult.regulation_pressure * 0.2f + lastEmbodiedResult.pressure * 0.1f) : 0.08f,
+                cost = lastEmbodiedResult != null ? Mathf.Clamp01(lastEmbodiedResult.pressure * 0.3f) : 0.08f,
             },
         }));
 
@@ -123,7 +123,7 @@ public class DemoController : MonoBehaviour
         demoHUD?.SetTurn("EMBODIED STEP", result);
         Debug.Log("EMBODIED STATE: " + result.state);
         Debug.Log("ACTION: " + result.action_type + " -> " + result.target_affordance_id);
-        Debug.Log("DOMINANT NEED: " + result.dominant_need);
+        Debug.Log("GATE REASON: " + (result.gate_layer != null ? result.gate_layer.studio_safe_reason : "none"));
         Debug.Log("SCENE TARGET: " + (actionExecutor != null ? actionExecutor.DescribeCurrentTarget() : "hold_position"));
         ApplyGameplay(result);
     }

@@ -31,7 +31,7 @@ public float  dwell_time;               // seconds if action_type == "dwell"
 ```csharp
 public float stability;         // [0-1] overall coherence
 public float aggression;        // [0-1]
-public float pressure;          // [0-1] internal regulation pressure
+public float pressure;          // [0-1] studio-safe aggregate pressure
 public float control;           // [0-1] self-regulation
 public float fidelity_score;    // [0-1] fidelity to role profile
 ```
@@ -40,43 +40,66 @@ public float fidelity_score;    // [0-1] fidelity to role profile
 
 ```csharp
 // gate_layer is the complete advisory surface
-public string gate_layer_behavior_gate;      // "open" | "caution" | "restricted"
-public string gate_layer_gate_source;        // "runtime_policy" | "drift_layer"
-public string gate_layer_drift_gate;         // raw drift gate before maxGate
-public string gate_layer_studio_safe_reason; // human-readable reason
-public string gate_layer_version;            // "behavior_gate_v1"
+public GateLayerDto gate_layer;
+
+gate_layer.behavior_gate;      // "open" | "caution" | "restricted"
+gate_layer.gate_source;        // "runtime_policy" | "drift_layer"
+gate_layer.drift_gate;         // raw drift gate before maxGate
+gate_layer.studio_safe_reason; // human-readable reason
+gate_layer.version;            // "behavior_gate_v1"
 ```
 
 ## Drift Layer
 
 ```csharp
 // drift_layer is the named behavioral gap (V1, read-only)
-public string drift_layer_drift_class;  // see drift class reference below
-public string drift_layer_severity;     // "none" | "mild" | "moderate" | "significant"
-public float  drift_layer_confidence;   // [0-1]
-public bool   drift_layer_degraded_semantics;
-public string drift_layer_studio_safe_reason;
-public int    drift_layer_context_size; // window steps used (0 = instant only)
+public DriftLayerDto drift_layer;
+
+drift_layer.drift_class;        // see drift class reference below
+drift_layer.severity;           // "none" | "mild" | "moderate" | "significant"
+drift_layer.confidence;         // [0-1]
+drift_layer.degraded_semantics;
+drift_layer.studio_safe_reason;
+drift_layer.context_size;       // window steps used (0 = instant only)
 ```
 
 ## Semantic Layer
 
 ```csharp
-public string semantic_layer_source;     // "elysian" | "fallback" | "none"
-public float  semantic_layer_confidence; // [0-1]
-public bool   semantic_layer_degraded;   // true = orientation unavailable
+public SemanticLayerDto semantic_layer;
+
+semantic_layer.source;     // "elysian" | "fallback" | "none"
+semantic_layer.confidence; // [0-1]
+semantic_layer.degraded;   // true = orientation unavailable
 ```
 
-## Internal State (informative, read-only)
+## Morphology Projection (optional, visual-only)
 
 ```csharp
-public float thermal_comfort;   // [0-1]
-public float energy;            // [0-1]
-public float stress_load;       // [0-1]
-public float safety_feeling;    // [0-1]
-public float social_attunement; // [0-1]
-public float curiosity_drive;   // [0-1]
+public OrundraMorphologyCandidateDto morphology_candidate;
+public MorphologyProjectionReceiptDto morphology_projection;
+public bool morphology_candidate_admitted;
 ```
+
+The candidate is exposed only when its schema, source, session, entity,
+bounded visual fields, and all four false authority bits pass the SDK guard.
+It is rejected unless the projection receipt is valid and has
+`status="produced"`.
+
+`morphology_projection.status="produced"` describes the source process.
+`morphology_candidate_admitted` describes the SDK output decision. They are
+kept distinct intentionally.
+
+```text
+body_state_exposed      = false
+influences_action       = false
+behavior_override       = false
+stable_memory_write     = false
+canon_promotion_allowed = false
+```
+
+Raw homeostasis, appraisal, memory weights, explanatory internals, Quark
+events, and Elysian debug payloads are not part of `StepEmbodied()`.
 
 ---
 
@@ -102,4 +125,4 @@ It does not alter action_policy.
 The gate holds the retina, not the wheel.
 ```
 
-*Version: behavior_gate_v1 — 2026-05-10*
+*Version: studio_contract_v0_7 — 2026-08-22*

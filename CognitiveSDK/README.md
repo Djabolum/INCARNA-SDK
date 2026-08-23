@@ -292,8 +292,21 @@ public class CognitiveResult
     public string runtime_policy;
     public string intent;
     public string text;
+    public SemanticLayerDto semantic_layer;
+    public DriftLayerDto drift_layer;
+    public GateLayerDto gate_layer;
+    public OrundraMorphologyCandidateDto morphology_candidate;
+    public MorphologyProjectionReceiptDto morphology_projection;
 }
 ```
+
+`CognitiveResult` intentionally contains no raw homeostasis, internal
+appraisal, memory weights, explanatory internals, or Quark event payloads.
+The optional Orundra morphology candidate is admitted only with a valid
+post-decision visual-only receipt and exact fail-closed contract checks.
+
+Full boundary and migration notes:
+`../docs/ORUNDRA_MORPHOLOGY_STUDIO_CONTRACT_V0_7.md`.
 
 ## Live Endpoint
 
@@ -495,6 +508,7 @@ The studio inspect route can now expose two levels of reading:
 
 This remains a reading surface only.
 It does not turn `Elysian` into an action planner.
+The public DTO intentionally ignores server-side memory payloads.
 
 ## Studio Demo
 
