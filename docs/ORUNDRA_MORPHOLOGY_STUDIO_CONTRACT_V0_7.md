@@ -1,6 +1,6 @@
 # Orundra Morphology Studio Contract V0.7
 
-## Status
+## SDK-local status
 
 ```text
 PUBLIC_BODY_STATE_FIELDS   = REMOVED
@@ -11,6 +11,15 @@ MORPHOLOGY_CANDIDATE       = OPTIONAL_GUARDED_VISUAL_ONLY
 RUNTIME_ACTIVATION         = NONE
 REAL_SOURCE_READ           = NONE
 ```
+
+`RUNTIME_ACTIVATION` and `REAL_SOURCE_READ` are scoped to this public SDK. The
+SDK neither activates the server relay nor calls Elysian itself. On 2026-08-23,
+the private server path executed one separately authorized one-shot read and
+returned a candidate that passed this public guard. That ecosystem event does
+not grant the SDK runtime, read, memory, monitoring, or canon authority.
+
+Canonical cross-repository receipt:
+`Djabolum/Void-Project: docs/receipts/ORUNDRA_MORPHOLOGY_DEPLOYMENT_ONE_SHOT_CLOSURE_2026_08_23.md`.
 
 V0.7 aligns the Unity-facing data model with the actual studio contract. The
 server may use homeostasis, appraisal, memory, and Elysian internally, but these
